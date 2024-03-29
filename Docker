@@ -1,0 +1,28 @@
+COPY as its name suggests copies ﬁles or directories from source to destination. The source can be the build context, previous build
+stage or another Docker Image altogether. The destination is a path under the ﬁle system of the Docker Image.
+
+COPY treats archives just like any other ﬁle and copies them without unpacking. It doesn’t mean one is
+inferior to the other, they just have diﬀerent uses.
+
+ADD allows fetching ﬁles from remote URLs and adds them to the Docker Image environment without adding them to the build
+context. It means uncorrupted, updated, authentic ﬁles without the host having to act as a mediator.
+
+ADD also treats archived ﬁles with more attention. If the source ﬁle is a recognizable archive (like and so on), ADD unpacks them
+before copying to the Docker Image ﬁle system.
+
+
+ADD does not support copying ﬁles from previous build stages or from other Docker Images.
+
+RUN makes subtle changes to the ﬁles and the Docker Image environment. As a result, the changes are
+committed with diﬀerent caching and changelog policies while keeping layer modularity and reverting back commits in focus. For
+example, the most recent ADD or COPY invalidates the cache created by all of the preceding ADDs and COPYs whereas each
+RUN layer maintains its own cache.
+
+RUN has two forms: shell form and exec Let us take a look at both of them:
+Shell It allows passing and executing commands directly in the shell of the container.
+
+
+Exec First of all, the exec form is useful when the base image does not contain a proper executable shell. Here is the syntax:
+RUN [“executable”, “param1”, “param2”]
+
+
