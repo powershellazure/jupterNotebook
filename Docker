@@ -19,10 +19,43 @@ example, the most recent ADD or COPY invalidates the cache created by all of the
 RUN layer maintains its own cache.
 
 RUN has two forms: shell form and exec Let us take a look at both of them:
-Shell It allows passing and executing commands directly in the shell of the container.
-
-
-Exec First of all, the exec form is useful when the base image does not contain a proper executable shell. Here is the syntax:
+1) Shell It allows passing and executing commands directly in the shell of the container.
+2) Exec First of all, the exec form is useful when the base image does not contain a proper executable shell. Here is the syntax:
 RUN [“executable”, “param1”, “param2”]
+
+
+CMD is similar to RUN and it also has shell and exec form as it accepts commands or executables along with parameters (or ﬂags), but it does not get committed during image build-time. The command provided withCMD stays reserved until the user invokes docker run without any executable command.CMD stays reserved until the user invokes docker run without any
+executable command. Thus, CMD’s accompanying command becomes the default executable if nothing is mentioned by the
+user.Due to such reserved operation, there should only be one CMD per docker image (per Dockerﬁle). If there is more than one
+CMDs, the latest CMD overwrites all of the previous ones.
+
+
+ENTRYPOINT is used to turn these containers into executable instructions. The working of ENTRYPOINT is the same
+as CMD but its treatment (by Docker Daemon) varies signiﬁcantly. ENTRYPOINT also executes commands when the container starts
+running and it also has shell and exec form but unlike CMD, it is diﬃcult to avoid.Generally, ENTRYPOINT is the process with PID 1
+
+
+working directory setup by WORKDIR if they are written after WORKDIR. You can also say
+that WORKDIR is a variant of RUN in a sense that it executes RUN cd followed by the respective path.
+
+
+STOPSIGNAL determines how it will terminate.
+
+
+USER As you might have guessed and as the name suggests, this instruction is used to set the user and group ID for the
+operations following it.
+
+
+LABEL follows a Key-Value pair format for adding information to the image. They can be extremely speciﬁc or completely random depending on the person writing them. The labels do not show up when we run the container but one can view them by asking for container or image description using docker inspect command
+
+
+ENV instruction. As you might have guessed, it is used to set the environment variables of a docker image. This instruction basically overwrites the environment variables. If your base image already has some environment variables set
+
+
+EXPOSE does not publish the aforementioned port. It just lets docker know about the port that the container is supposed to listen to. The information is not absolute and the actually published port can be diﬀerent from the one used with EXPOSE. Doing so will not make ANY diﬀerence to the container’s performance. This is just for the sake of networking guidance.
+
+
+
+
 
 
